@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px auto; max-width: 550px; line-height: 1.5; }
+        .alert-error { background-color: #fce8e6; color: #c5221f; border: 1px solid #f5c2c7; padding: 12px; border-radius: 4px; margin-bottom: 20px; font-weight: bold; }
+        .form-group { margin-bottom: 18px; }
+        label.field-label { display: block; font-weight: bold; margin-bottom: 6px; }
+        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .option-group { margin-bottom: 6px; }
+        .required { color: #d93025; }
+        button { background-color: #0056b3; color: white; border: none; padding: 10px 18px; font-size: 15px; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #004085; }
+    </style>
+</head>
+<body>
+
+    <h2>Student Information Application</h2>
+
+    {% if error_msg %}
+        <div class="alert-error">
+            {{ error_msg }}
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Student Name [Text Box] -->
+        <div class="form-group">
+            <label class="field-label" for="student_name">Student Name <span class="required">*</span></label>
+            <input type="text" id="student_name" name="student_name" value="{{ submitted_data.student_name|default:'' }}">
+        </div>
+
+        <!-- Student ID [Text Box] -->
+        <div class="form-group">
+            <label class="field-label" for="student_id">Student ID <span class="required">*</span></label>
+            <input type="text" id="student_id" name="student_id" value="{{ submitted_data.student_id|default:'' }}">
+        </div>
+
+        <!-- Major [Drop-down List] -->
+        <div class="form-group">
+            <label class="field-label" for="major">Major</label>
+            <select id="major" name="major">
+                {% for major_item in major_options %}
+                    <option value="{{ major_item }}" {% if submitted_data.major == major_item %}selected{% endif %}>
+                        {{ major_item }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Class Standing [Radio Buttons] -->
+        <div class="form-group">
+            <label class="field-label">Class Standing</label>
+            {% for standing_item in standing_options %}
+                <div class="option-group">
+                    <input type="radio" id="standing_{{ forloop.counter }}" name="class_standing" value="{{ standing_item }}" 
+                           {% if submitted_data.class_standing == standing_item or forloop.first and not submitted_data %}checked{% endif %}>
+                    <label for="standing_{{ forloop.counter }}">{{ standing_item }}</label>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Programming Languages Known [Checkboxes] -->
+        <div class="form-group">
+            <label class="field-label">Programming Languages Known</label>
+            {% for lang_item in language_options %}
+                <div class="option-group">
+                    <input type="checkbox" id="lang_{{ forloop.counter }}" name="languages_known" value="{{ lang_item }}"
+                           {% if lang_item in selected_langs %}checked{% endif %}>
+                    <label for="lang_{{ forloop.counter }}">{{ lang_item }}</label>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Expected Graduation Year [Number Input] -->
+        <div class="form-group">
+            <label class="field-label" for="expected_grad">Expected Graduation Year</label>
+            <input type="number" id="expected_grad" name="expected_grad" min="2024" max="2035" value="{{ submitted_data.expected_grad|default:'2027' }}">
+        </div>
+
+        <!-- Comments [Multi-line Text Area] -->
+        <div class="form-group">
+            <label class="field-label" for="comments">Comments</label>
+            <textarea id="comments" name="comments" rows="4">{{ submitted_data.comments|default:'' }}</textarea>
+        </div>
+
+        <!-- Submit [Button] -->
+        <button type="submit">Submit</button>
+
+    </form>
+
+</body>
+</html>

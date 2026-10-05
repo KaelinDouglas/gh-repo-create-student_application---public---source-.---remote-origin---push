@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration Summary</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px auto; max-width: 550px; line-height: 1.6; }
+        .summary-card { border: 1px solid #d0d7de; border-radius: 6px; padding: 20px; background-color: #f6f8fa; }
+        .summary-row { margin-bottom: 10px; border-bottom: 1px solid #e1e4e8; padding-bottom: 6px; }
+        .summary-row:last-child { border-bottom: none; }
+        .label-title { font-weight: bold; color: #24292e; display: inline-block; width: 200px; }
+        .back-link { display: inline-block; margin-top: 18px; color: #0056b3; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <h2>Student Registration Summary</h2>
+
+    <div class="summary-card">
+        <div class="summary-row">
+            <span class="label-title">Student Name:</span>
+            <span>{{ record.student_name }}</span>
+        </div>
+        <div class="summary-row">
+            <span class="label-title">Student ID:</span>
+            <span>{{ record.student_id }}</span>
+        </div>
+        <div class="summary-row">
+            <span class="label-title">Major:</span>
+            <span>{{ record.major }}</span>
+        </div>
+        <div class="summary-row">
+            <span class="label-title">Class Standing:</span>
+            <span>{{ record.class_standing }}</span>
+        </div>
+        <div class="summary-row">
+            <span class="label-title">Programming Languages:</span>
+            <span>{{ record.languages }}</span>
+        </div>
+        <div class="summary-row">
+            <span class="label-title">Expected Graduation:</span>
+            <span>{{ record.expected_grad }}</span>
+        </div>
+        {% if record.comments %}
+        <div class="summary-row">
+            <span class="label-title">Comments:</span>
+            <span>{{ record.comments }}</span>
+        </div>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'registration_entry' %}" class="back-link">&larr; Submit Another Student</a>
+
+</body>
+</html>
